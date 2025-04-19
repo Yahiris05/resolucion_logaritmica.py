@@ -15,7 +15,6 @@ def resolver_ecuacion_log(producto, suma, max_iter=1000):
     if producto <= 0 or suma <= 0:
         return None
     
-    # Estimación inicial inteligente
     base = producto ** (1/suma) if suma != 0 else 2.0
     
     for _ in range(max_iter):
@@ -23,16 +22,15 @@ def resolver_ecuacion_log(producto, suma, max_iter=1000):
             log_val = math.log(producto, base)
             error = log_val - suma
             
-            if abs(error) < 1e-10:  # Tolerancia ajustada
+            if abs(error) < 1e-10:  
                 return base
                 
-            # Ajuste de base basado en el error
             base *= math.exp(-error/suma)
             
         except (ValueError, ZeroDivisionError):
             return None
             
-    return base  # Devuelve la mejor aproximación obtenida
+    return base  
 
 def procesar_cuartetos(datos):
     """Procesamiento robusto de todos los cuartetos"""
@@ -65,24 +63,20 @@ def procesar_cuartetos(datos):
     return resultados, exitosos
 
 def main():
-    # Datos de prueba verificados
+   
     datos_prueba = [2, 3, 4, 2, 1, 5, 5, 1, 8, 2, 2, 8]
     
-    # Procesamiento
     resultados, exitosos = procesar_cuartetos(datos_prueba)
     
-    # Ordenar productos exitosos
     productos_validos = [r["producto"] for r in resultados if r["base"] is not None]
     productos_ordenados = quicksort(productos_validos)
     
-    # Mostrar resultados
     print("=== RESULTADOS ===")
     for i, res in enumerate(resultados, 1):
         print(f"\n- Cuarteto {i}: {res['cuarteto']}")
         print(f"  Suma: {res['suma']} | Producto: {res['producto']}")
         print(f"  {res['estado']}")
     
-    # Mostrar estadísticas
     print("\n=== ESTADÍSTICAS ===")
     print(f"Éxitos: {exitosos} | Fallos: {len(resultados) - exitosos}")
     print(f"Productos ordenados: {productos_ordenados}")
